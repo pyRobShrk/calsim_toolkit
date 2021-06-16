@@ -230,6 +230,26 @@ def condense_to_tidy(df, a=None, c=None, f=None):
     # Return DataFrame.
     return df_out
 
+def monthlyWY_pivot(df):
+    """
+    Summary
+    -------
+    Transforms wide format to monthly Water Year pivot
+
+    """
+    # Ensure input DataFrame is in wide or condense format.
+    if not (validation.is_wide(df) or validation.is_condense(df)):
+        msg = 'DataFrame must be in wide or condense format for Monthly WY'
+        raise TypeError(msg)
+    # Create Month/WY Columns
+    df['month'] = df.index.month
+    df['WY'] = df.index.year
+    df.loc[df.month > 9,'WY'] += 1
+    # Pivot
+    df_out = df.pivot_table(index='WY',columns='month')
+    # Sort months by WY
+    df_out = df_out.reindex(df_out.columns.set_levels([10,11,12,1,2,3,4,5,6,7,8,9],'month'),axis=1)
+    return df_out
 
 # %% Execute script.
 if __name__ == '__main__':
