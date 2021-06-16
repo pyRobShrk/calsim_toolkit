@@ -182,6 +182,10 @@ class CalSimAccessor(object):
         # Return the transformed DataFrame.
         return df
 
+    def monthly(self, verbose=True):
+        df = self._obj.copy()
+        return transform.monthlyWY_pivot(df)
+    
     def compress(self, verbose=True):
         pass
 
